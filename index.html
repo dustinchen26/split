@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Upload and Split Files</h2>
-    <p id="fileSizeMessage">The file will be split into parts, with each part being approximately 400MB.</p>
+    <p id="fileSizeMessage">The file will be split into parts, with each part being approximately 455 MB.</p>
     <button onclick="document.getElementById('fileInput').click()">Choose File and Upload</button>
     <input type="file" id="fileInput" name="file" accept=".txt" style="display: none;">
 
@@ -18,7 +18,7 @@
             const file = this.files[0];
             
             if (file && file.name.startsWith('du_stats_')) {
-                const chunkSize = 400 * 1024 * 1024; // 400MB
+                const chunkSize = 455 * 1024 * 1024; // 400MB
 
                 let start = 0;
                 let partNumber = 1;
