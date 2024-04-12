@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Split Files</title>
+</head>
+<body>
+    <h2>Upload and Split Files</h2>
+    <p id="fileSizeMessage">The file will be split into parts, with each part being approximately 400MB.</p>
+    <button onclick="document.getElementById('fileInput').click()">Choose File and Upload</button>
+    <input type="file" id="fileInput" name="file" accept=".txt" style="display: none;">
+
+    <div id="downloadLinks"></div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function() {
+            const file = this.files[0];
+            
+            if (file && file.name.startsWith('du_stats_')) {
+                const chunkSize = 400 * 1024 * 1024; // 400MB
+
+                let start = 0;
+                let partNumber = 1;
+                let end = Math.min(chunkSize, file.size);
+
+                // 清空之前的連結
+                const downloadLinksDiv = document.getElementById('downloadLinks');
+                downloadLinksDiv.innerHTML = '';
+
+                while (start < file.size) {
+                    const blob = file.slice(start, end);
+                    const partBlob = new Blob([blob], { type: 'text/plain' });
+                    const partFileName = `part${partNumber}.txt`;
+
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(partBlob);
+                    a.download = partFileName;
+                    a.textContent = partFileName;
+                    downloadLinksDiv.appendChild(a);
+                    downloadLinksDiv.appendChild(document.createElement('br'));
+
+                    start = end;
+                    end = Math.min(start + chunkSize, file.size);
+                    partNumber++;
+                }
+            } else {
+                alert('Please choose a file starting with "du_stats_"');
+            }
+        });
+    </script>
+</body>
+</html>
